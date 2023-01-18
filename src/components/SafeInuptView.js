@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 
 const SafeInputView = ({ children }) => {
-  console.log(children);
   return (
     <KeyboardAvoidingView
       style={styles.avoid}
