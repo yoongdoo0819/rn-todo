@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BLACK, GRAY, PRIMARY } from '../color';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const KeyboardTypes = {
   DEFAULT: 'default',
@@ -13,10 +14,16 @@ export const ReturnKeyTypes = {
   NEXT: 'next',
 };
 
+export const IconNames = {
+  EMAIL: 'email',
+  PASSWORD: 'lock',
+};
+
 const Input = ({
   title,
   placeholder,
   value,
+  iconName,
   //   keyboardType,
   //   returnKeyType,
   //   secureTextEntry,
@@ -35,26 +42,44 @@ const Input = ({
       >
         {title}
       </Text>
-      <TextInput
-        {...props}
-        value={value}
-        style={[
-          styles.input,
-          value && styles.hasValueInput,
-          isFocused && styles.focusedInput,
-        ]}
-        placeholder={placeholder ?? title}
-        placeholderTextColor={GRAY.DEFAULT}
-        autoCapitalize={'none'}
-        autoCorrect={false}
-        textContentType={'none'}
-        keyboardAppearance={'light'}
-        onBlur={() => setIsFocused(false)}
-        onFocus={() => setIsFocused(true)}
-        // keyboardType={keyboardType}
-        // returnKeyType={returnKeyType}
-        // secureTextEntry={secureTextEntry}
-      ></TextInput>
+      <View>
+        <TextInput
+          {...props}
+          value={value}
+          style={[
+            styles.input,
+            value && styles.hasValueInput,
+            isFocused && styles.focusedInput,
+          ]}
+          placeholder={placeholder ?? title}
+          placeholderTextColor={GRAY.DEFAULT}
+          autoCapitalize={'none'}
+          autoCorrect={false}
+          textContentType={'none'}
+          keyboardAppearance={'light'}
+          onBlur={() => setIsFocused(false)}
+          onFocus={() => setIsFocused(true)}
+          // keyboardType={keyboardType}
+          // returnKeyType={returnKeyType}
+          // secureTextEntry={secureTextEntry}
+        ></TextInput>
+        <View style={styles.icon}>
+          <MaterialCommunityIcons
+            name={iconName}
+            size={20}
+            color={(() => {
+              switch (true) {
+                case isFocused:
+                  return PRIMARY.DEFAULT;
+                case !!value:
+                  return BLACK;
+                default:
+                  return GRAY.DEFAULT;
+              }
+            })()}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -95,6 +120,13 @@ const styles = StyleSheet.create({
     borderColor: GRAY.DEFAULT,
     paddingHorizontal: 20,
     height: 42,
+    paddingLeft: 35,
+  },
+  icon: {
+    position: 'absolute',
+    left: 8,
+    height: '100%',
+    justifyContent: 'center',
   },
 });
 
