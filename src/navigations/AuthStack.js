@@ -5,6 +5,7 @@ import ListScreen from '../screens/ListScreen';
 import { WHITE } from '../color';
 import { Pressable, Text } from 'react-native';
 import { PRIMARY } from '../color';
+import headerLeftButton from '../components/HeaderLeftButton';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,8 @@ const AuthStack = () => {
           fontWeight: '700',
         },
         title: 'TODO List',
+        headerBackTitleVisible: false,
+        headerLeft: headerLeftButton,
       }}
     >
       <Stack.Screen name={'Home'} component={SignInScreen} />
