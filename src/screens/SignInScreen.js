@@ -6,14 +6,31 @@ import Input, {
 } from '../components/Input';
 import { Keyboard, KeyboardAvoidingView, Pressable } from 'react-native';
 import SafeInputView from '../components/SafeInuptView';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from '../components/Button';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+  /*
+   * useEffect
+  useEffect(() => {
+    console.log(`always : ${email} ${password}`);
+  }); // always
+  useEffect(() => {
+    console.log(`mount : ${email} ${password}`);
+  }, []); // mount
+  useEffect(() => {
+    console.log(`email : ${email} ${password}`);
+  }, [email]); // email
+  */
+
+  useEffect(() => {
+    setDisabled(!email || !password);
+  }, [email, password]);
 
   const onSubmit = () => {
     if (!disabled) {
