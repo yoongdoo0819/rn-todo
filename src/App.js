@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import SignInScreen from './screens/SignInScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './navigations/AuthStack';
+import MainStack from './navigations/MainStack';
+import { useState } from 'react';
 
 const App = () => {
+  const [user, setUser] = useState(null);
+
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
-      <AuthStack></AuthStack>
-      {/* <TestAvoid></TestAvoid> */}
+      {user ? <MainStack /> : <AuthStack setUser={setUser} />}
     </NavigationContainer>
   );
 };

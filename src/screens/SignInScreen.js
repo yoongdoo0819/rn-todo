@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from '../components/Button';
 import { signIn } from '../api/auth';
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = ({ navigation, setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
@@ -51,6 +51,7 @@ const SignInScreen = ({ navigation }) => {
       try {
         const data = await signIn(email, password);
         console.log(data);
+        setIsLoading(false);
 
         Alert.alert('Login Success', data, [
           {
@@ -58,7 +59,8 @@ const SignInScreen = ({ navigation }) => {
           },
         ]);
 
-        navigation.push('List');
+        //navigation.navigate('List');
+        setUser(data);
       } catch (e) {
         Alert.alert('Login Failed', e, [
           {
