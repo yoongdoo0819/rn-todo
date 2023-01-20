@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { PRIMARY, WHITE } from '../color';
+import { PRIMARY, WHITE, GRAY } from '../color';
 
-const Button = ({ title, onPress, disabled }) => {
+const Button = ({ title, onPress, disabled, isLoading }) => {
   return (
     <Pressable
       onPress={onPress}
@@ -12,7 +12,14 @@ const Button = ({ title, onPress, disabled }) => {
         disabled && { backgroundColor: PRIMARY.LIGHT },
       ]}
     >
-      <Text style={styles.title}>{title}</Text>
+      {isLoading ? (
+        <ActivityIndicator
+          size={'small'}
+          color={GRAY.DEFAULT}
+        ></ActivityIndicator>
+      ) : (
+        <Text style={styles.title}>{title}</Text>
+      )}
     </Pressable>
   );
 };

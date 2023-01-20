@@ -8,12 +8,14 @@ import { Keyboard, KeyboardAvoidingView, Pressable } from 'react-native';
 import SafeInputView from '../components/SafeInuptView';
 import { useState, useRef, useEffect } from 'react';
 import Button from '../components/Button';
+import { signIn } from '../api/auth';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   /*
    * useEffect
@@ -32,10 +34,17 @@ const SignInScreen = () => {
     setDisabled(!email || !password);
   }, [email, password]);
 
-  const onSubmit = () => {
-    if (!disabled) {
+  const onSubmit = async () => {
+    if (!disabled && !isLoading) {
       Keyboard.dismiss();
-      console.log('onSubmit');
+      setIsLoading(true);
+      try {
+        const data = await signIn(email, password);
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
+      setIsLoading(false);
     }
   };
 
@@ -73,6 +82,7 @@ const SignInScreen = () => {
             title={'LOGIN'}
             onPress={onSubmit}
             disabled={disabled}
+            isLoading={isLoading}
           ></Button>
         </View>
       </View>
