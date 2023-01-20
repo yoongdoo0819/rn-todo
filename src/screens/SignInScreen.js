@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import Input, {
   KeyboardTypes,
   ReturnKeyTypes,
@@ -41,10 +41,31 @@ const SignInScreen = () => {
       try {
         const data = await signIn(email, password);
         console.log(data);
+
+        Alert.alert('Login Success', data, [
+          {
+            onPress: () => setIsLoading(false),
+          },
+        ]);
       } catch (e) {
-        console.log(e);
+        Alert.alert('Login Failed', e, [
+          {
+            text: 'default',
+            onPress: () => setIsLoading(false),
+            style: 'default',
+          },
+          {
+            text: 'cancel',
+            onPress: () => setIsLoading(false),
+            style: 'cancel',
+          },
+          {
+            text: 'done',
+            onPress: () => setIsLoading(false),
+            style: 'destructive',
+          },
+        ]);
       }
-      setIsLoading(false);
     }
   };
 
