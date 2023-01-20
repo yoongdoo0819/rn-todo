@@ -27,7 +27,13 @@ const AuthStack = () => {
         headerLeft: HeaderLeftButton,
       }}
     >
-      <Stack.Screen name={'Home'} component={SignInScreen} />
+      <Stack.Screen
+        name={'Home'}
+        component={SignInScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name={'List'}
         component={ListScreen}
