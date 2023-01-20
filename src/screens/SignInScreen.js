@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from '../components/Button';
 import { signIn } from '../api/auth';
 
-const SignInScreen = ({ navigation, route }) => {
+const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
@@ -18,7 +18,7 @@ const SignInScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   /*
-   * useEffect
+   * useEffect 예시 always or mount(only one time) or email 값에 따라
   useEffect(() => {
     console.log(`always : ${email} ${password}`);
   }); // always
@@ -28,6 +28,16 @@ const SignInScreen = ({ navigation, route }) => {
   useEffect(() => {
     console.log(`email : ${email} ${password}`);
   }, [email]); // email
+  */
+
+  /* setOptions 사용 예시
+  useEffect(() => {
+    navigation.setOptions({
+      contentStyle: {
+        backgroundColor: email ? 'skyblue' : 'lightgray',
+      },
+    });
+  }, [navigation, email]);
   */
 
   useEffect(() => {
