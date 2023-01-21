@@ -54,14 +54,13 @@ const SignInScreen = ({ navigation }) => {
       try {
         const data = await signIn(email, password);
         console.log(data);
-        setIsLoading(false);
-        /*
+
         Alert.alert('Login Success', data, [
           {
             onPress: () => setIsLoading(false),
           },
         ]);
-*/
+
         //navigation.navigate('List');
         setUser(data);
       } catch (e) {
