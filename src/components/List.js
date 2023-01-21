@@ -6,11 +6,13 @@ const Separator = () => {
   return <View style={styles.separator}></View>;
 };
 
-const List = ({ data, setIsBottom }) => {
+const List = ({ data, setIsBottom, onDelete, onToggle }) => {
   return (
     <FlatList
       data={data}
-      renderItem={({ item }) => <ListItem item={item} />}
+      renderItem={({ item }) => (
+        <ListItem item={item} onDelete={onDelete} onToggle={onToggle} />
+      )}
       windowSize={5} // prev : 2 , curr : 1, next: 2
       ItemSeparatorComponent={Separator}
       ListHeaderComponent={() => <View style={{ height: 10 }}></View>}
