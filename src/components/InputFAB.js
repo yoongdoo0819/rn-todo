@@ -1,4 +1,5 @@
 import {
+  Animated,
   Platform,
   Pressable,
   StyleSheet,
@@ -10,32 +11,43 @@ import { BLACK, PRIMARY, WHITE } from '../color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 
+const BUTTON_WIDTH = 60;
+
 const InputFAB = () => {
   const [text, setText] = useState('');
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef(null);
   const windowWidth = useWindowDimensions().width;
+  const inputWidth = useRef(new Animated.Value(BUTTON_WIDTH)).current;
 
   const open = () => {
     setIsOpened(true);
-    inputRef.current.focus();
+    Animated.timing(inputWidth, {
+      toValue: windowWidth - 20,
+      useNativeDriver: false,
+      duration: 300,
+    }).start(() => {
+      inputRef.current.focus();
+    });
   };
 
   const close = () => {
     setIsOpened(false);
-    inputRef.current.blur();
+    Animated.timing(inputWidth, {
+      toValue: BUTTON_WIDTH,
+      useNativeDriver: false,
+      duration: 300,
+    }).start(() => {
+      inputRef.current.blur();
+    });
   };
 
   const onPressButton = () => (isOpened ? close() : open());
 
   return (
     <>
-      <View
-        style={[
-          styles.container,
-          styles.shadow,
-          isOpened && { width: windowWidth - 20 },
-        ]}
+      <Animated.View
+        style={[styles.container, styles.shadow, { width: inputWidth }]}
       >
         <TextInput
           ref={inputRef}
@@ -49,7 +61,7 @@ const InputFAB = () => {
           returnKeyType={'done'}
           onBlur={close}
         ></TextInput>
-      </View>
+      </Animated.View>
 
       <Pressable
         onPress={onPressButton}
@@ -73,9 +85,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     right: 10,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: BUTTON_WIDTH,
+    height: BUTTON_WIDTH,
+    borderRadius: BUTTON_WIDTH / 2,
     backgroundColor: PRIMARY.DEFAULT,
     justifyContent: 'center',
     alignItems: 'center',
@@ -83,7 +95,7 @@ const styles = StyleSheet.create({
   input: {
     color: WHITE,
     paddingLeft: 20,
-    paddingRight: 70,
+    paddingRight: BUTTON_WIDTH + 10,
   },
   shadow: {
     shadowColor: BLACK,
