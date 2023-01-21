@@ -10,7 +10,7 @@ const HeaderLeftButton = ({ canGoBack, tintColor }) => {
   }
 
   return (
-    <Pressable onPress={navigation.goBack} hitslop={10}>
+    <Pressable onPress={navigation.goBack} hitSlop={10}>
       <MaterialCommunityIcons
         name="chevron-left"
         size={30}
