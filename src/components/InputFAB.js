@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 const BOTTOM = 30;
 const BUTTON_WIDTH = 60;
 
-const InputFAB = () => {
+const InputFAB = ({ onInsert }) => {
   const [text, setText] = useState('');
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef(null);
@@ -52,6 +52,7 @@ const InputFAB = () => {
       duration: 300,
     }).start(() => {
       inputRef.current.blur();
+      setText('');
     });
     Animated.spring(buttonRotation, {
       toValue: 0,
@@ -61,6 +62,12 @@ const InputFAB = () => {
   };
 
   const onPressButton = () => (isOpened ? close() : open());
+  const onPressInsert = () => {
+    const task = text.trim();
+    if (task) {
+      onInsert(task);
+    }
+  };
 
   useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -102,6 +109,7 @@ const InputFAB = () => {
           keyboardAppearance={'light'}
           returnKeyType={'done'}
           onBlur={close}
+          onSubmitEditing={onPressInsert}
         ></TextInput>
       </Animated.View>
 
