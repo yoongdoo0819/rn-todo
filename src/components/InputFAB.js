@@ -1,11 +1,12 @@
 import {
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
-import { PRIMARY, WHITE } from '../color';
+import { BLACK, PRIMARY, WHITE } from '../color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 
@@ -29,7 +30,13 @@ const InputFAB = () => {
 
   return (
     <>
-      <View style={[styles.container, isOpened && { width: windowWidth - 20 }]}>
+      <View
+        style={[
+          styles.container,
+          styles.shadow,
+          isOpened && { width: windowWidth - 20 },
+        ]}
+      >
         <TextInput
           ref={inputRef}
           value={text}
@@ -77,6 +84,17 @@ const styles = StyleSheet.create({
     color: WHITE,
     paddingLeft: 20,
     paddingRight: 70,
+  },
+  shadow: {
+    shadowColor: BLACK,
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+      },
+      android: { elevation: 10 },
+    }),
   },
 });
 
