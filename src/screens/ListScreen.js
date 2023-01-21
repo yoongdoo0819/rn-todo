@@ -1,12 +1,8 @@
-import { FlatList, StyleSheet, View } from 'react-native';
-import { GRAY } from '../color';
-import ListItem from '../components/Listitem';
-
-const Separator = () => {
-  return <View style={styles.separator}></View>;
-};
+import EmptyList from '../components/EmptyList';
+import List from '../components/List';
 
 const ListScreen = () => {
+  //const todos = [];
   const todos = [
     { id: 1, task: 'React Native 1', isDone: false },
     { id: 2, task: 'React Native 2', isDone: true },
@@ -15,26 +11,7 @@ const ListScreen = () => {
     { id: 5, task: 'React Native 5', isDone: false },
   ];
 
-  return (
-    <FlatList
-      data={todos}
-      renderItem={({ item }) => <ListItem item={item} />}
-      windowSize={5} // prev : 2 , curr : 1, next: 2
-      ItemSeparatorComponent={Separator}
-      //ListHeaderComponent={() => <View style={{ height: 10 }}></View>}
-      ListHeaderComponent={View}
-      ListHeaderComponentStyle={{ height: 10 }}
-    />
-  );
+  return todos.length ? <List data={todos}></List> : <EmptyList></EmptyList>;
 };
-
-const styles = StyleSheet.create({
-  separator: {
-    height: 1,
-    backgroundColor: GRAY.LIGHT,
-    marginVertical: 10,
-    marginHorizontal: 10,
-  },
-});
 
 export default ListScreen;
