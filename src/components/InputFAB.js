@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import { BLACK, PRIMARY, WHITE } from '../color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+const BOTTOM = 30;
 const BUTTON_WIDTH = 60;
 
 const InputFAB = () => {
@@ -18,7 +19,14 @@ const InputFAB = () => {
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef(null);
   const windowWidth = useWindowDimensions().width;
+  const [keyboardHeight, setKeyboardHeight] = useState(BOTTOM);
+
   const inputWidth = useRef(new Animated.Value(BUTTON_WIDTH)).current;
+  const buttonRotation = useRef(new Animated.Value(0)).current;
+  const spin = buttonRotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '315deg'],
+  });
 
   const open = () => {
     setIsOpened(true);
@@ -29,6 +37,11 @@ const InputFAB = () => {
     }).start(() => {
       inputRef.current.focus();
     });
+    Animated.spring(buttonRotation, {
+      toValue: 1,
+      useNativeDriver: false,
+      bounciness: 20,
+    }).start();
   };
 
   const close = () => {
@@ -40,14 +53,43 @@ const InputFAB = () => {
     }).start(() => {
       inputRef.current.blur();
     });
+    Animated.spring(buttonRotation, {
+      toValue: 0,
+      useNativeDriver: false,
+      bounciness: 20,
+    }).start();
   };
 
   const onPressButton = () => (isOpened ? close() : open());
 
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      const show = Keyboard.addListener('keyboardWillShow', (e) => {
+        setKeyboardHeight(e.endCoordinates.height + BOTTOM);
+      });
+      const hide = Keyboard.addListener('keyboardWillHide', () => {
+        setKeyboardHeight(BOTTOM);
+      });
+
+      return () => {
+        show.remove();
+        hide.remove();
+      };
+    }
+  }, []);
+
   return (
     <>
       <Animated.View
-        style={[styles.container, styles.shadow, { width: inputWidth }]}
+        style={[
+          styles.container,
+          styles.shadow,
+          {
+            bottom: keyboardHeight,
+            alignItems: 'flex-start',
+            width: inputWidth,
+          },
+        ]}
       >
         <TextInput
           ref={inputRef}
@@ -63,19 +105,27 @@ const InputFAB = () => {
         ></TextInput>
       </Animated.View>
 
-      <Pressable
-        onPress={onPressButton}
-        style={({ pressed }) => [
+      <Animated.View
+        style={[
           styles.container,
-          pressed && { backgroundColor: PRIMARY.DARK },
+          { bottom: keyboardHeight, transform: [{ rotate: spin }] },
         ]}
       >
-        <MaterialCommunityIcons
-          name="plus"
-          size={24}
-          color={WHITE}
-        ></MaterialCommunityIcons>
-      </Pressable>
+        <Pressable
+          onPress={onPressButton}
+          style={({ pressed }) => [
+            styles.container,
+            { right: 0 },
+            pressed && { backgroundColor: PRIMARY.DARK },
+          ]}
+        >
+          <MaterialCommunityIcons
+            name="plus"
+            size={24}
+            color={WHITE}
+          ></MaterialCommunityIcons>
+        </Pressable>
+      </Animated.View>
     </>
   );
 };
@@ -83,7 +133,6 @@ const InputFAB = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 30,
     right: 10,
     width: BUTTON_WIDTH,
     height: BUTTON_WIDTH,
